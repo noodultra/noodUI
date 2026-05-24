@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>noodUI</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="https://font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplified,Latin&display=swap">
+        <style>
+            /* 全局设置 默认为深色模式 通过按钮切换模式*/
+            :root
+            {
+                --bg: linear-gradient(135deg, #1e1f2a 0%, #2c2d3a 50%);
+                --card: rgba(255, 255, 255, 0.05);
+                --text: pink;
+                --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                --blur: blur(12px);
+                --radius: 14px;
+                --ease: cubic-bezier(0.4, 0, 0.2, 1);
+                --cyan: linear-gradient(90deg, #36d1dc, #5b86e5);
+            }
+            /* 浅色模式 */
+            [data-theme="light"]
+            {
+                --bg: linear-gradient(135deg, lightblue 0%, lavender 50%);
+                --card: rgba(255, 255, 255, 0.8);
+                --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                --ease: cubic-bezier(0.4, 0, 0.2, 1);
+                --text: #333;
+            }
+            /* 全局样式 */
+            body
+            {
+                color: var(--text);
+                background: var(--bg);
+                margin: 0;
+                padding: 20px;
+                min-height: 100vh;
+                transition: background-color 0.03s ease;
+                font-family: "MiSans", "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
+            }
+            /* 全局超链接(a)样式 */
+            a {
+                background: var(--cyan);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                text-decoration: none;
+            }
+
+            /* 页面内标题显示样式 */
+            .title
+            {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: var(--card);
+                backdrop-filter: var(--blur);
+                border-radius: var(--radius);
+                padding: 12px 16px;
+                gap: 10px;
+            }
+            .title-title
+            {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .title-title img
+            {
+                width: 32px;
+                height: 32px;
+            }
+
+            /* 深浅模式切换胶囊按钮 */
+            .theme-toggle {
+                position: relative;
+                width: 60px;
+                height: 28px;
+                background-color: rgba(255, 255, 255, 0.2);
+                border-radius: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 6px;
+                cursor: pointer;
+                border: none;
+                outline: none;
+                box-sizing: border-box;
+            }
+            .toggle-icon {
+                font-size: 14px;
+                line-height: 1;
+                z-index: 1;
+                pointer-events: none;
+            }
+            .toggle-slider {
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 24px;
+                height: 24px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border-radius: 50%;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 2;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            }
+            /* 浅色模式下滑块移动到右侧(覆盖太阳) */
+            [data-theme="light"] .toggle-slider {
+                transform: translateX(30px);
+            }
+            /* 不同模式下胶囊背景微调 */
+            [data-theme="dark"] .theme-toggle {
+                background-color: rgba(255, 255, 255, 0.25);
+            }
+            [data-theme="light"] .theme-toggle {
+                background-color: rgba(0, 0, 0, 0.15);
+            }
+
+            /* 导航栏样式 */
+            .nav
+            {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--card);
+                backdrop-filter: var(--blur);
+                border-radius: var(--radius);
+                padding: 12px 16px;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            /* 内容卡片样式 */
+            .box
+            {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .card
+            {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                background: var(--card);
+                backdrop-filter: var(--blur);
+                border-radius: var(--radius);
+                padding: 16px;
+                gap: 12px;
+                width: 256px;
+                height: 256px;
+                text-align: center;
+                transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+            }
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow);
+            }
+            .card p 
+            {
+                margin: 0;
+                line-height: 1.5;
+            }
+
+            /* 版权声明样式 */
+            .copyright
+            {
+                text-align: center;
+                padding: 30px 20px 20px;
+                opacity: 0.7;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        
+        <!-- 页面内显示标题 -->
+        <div class="title">
+            <div class="title-title">
+                <img src="https://nood.icu/nood/nood-1200-nobg.png" alt="头像">
+                <h3>noodUI</h3>
+            </div>
+            <div class="title-btn">
+            <button id="theme-toggle" class="theme-toggle" aria-label="切换深色/浅色模式">
+                <span class="toggle-icon">🌙</span>
+                <span class="toggle-icon">☀️</span>
+                <div class="toggle-slider"></div>
+            </button>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <div class="nav hover">
+            <a href="https://noodui.nood.icu/index.html">首页</a>
+            <a href="https://noodui.nood.icu/404.html">404页面</a>
+            <a href="https://github.com/noodultra/noodUI">GitHub</a>
+        </div>
+
+        <!-- 内容卡片 -->
+        <div class="box">
+            <div class="card">
+                <h2>网站介绍</h2>
+                <p>这里是noodUI演示站 托管于GitHub 面缶酱写的呢~</p>
+            </div>
+            <div class="card">
+                <h2>noodUI介绍</h2>
+                <p>为简介而生的网页UI</p>
+            </div>
+        </div>
+
+        <!-- 版权声明 -->
+        <div class="copyright">
+            <p>powered by <a href="https://noodui.nood.icu">noodUI</a> Copyright © 2026 <a href="https://www.nood.icu">面缶</a>. All rights reserved.</p>
+        </div>
+
+        <!-- JavaScript代码 -->
+        <script>
+            
+            // 默认为深色模式
+            document.documentElement.dataset.theme = 'dark';
+
+            // 深浅色模式切换按钮逻辑
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle)
+            {
+                themeToggle.addEventListener('click', () =>
+                {
+                    const currentTheme = document.documentElement.dataset.theme;
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.dataset.theme = newTheme;
+                });
+            }
+
+            // 渐入动画
+            const animatedSelectors = ['.title', '.nav', '.box'];
+            const animatedElements = document.querySelectorAll(animatedSelectors.join(','));
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            });
+            animatedElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // 卡片悬浮(hover)效果
+            document.querySelectorAll('.hover').forEach(el => {
+                if (!el.style.transition) {
+                    el.style.transition = 'transform 0.3s var(--ease), box-shadow 0.3s ease';
+                }
+            });
+
+        </script>
+        
+    </body>
+</html>
