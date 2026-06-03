@@ -13,8 +13,8 @@ View[Demo](https://noodui.nood.icu)
 - Used[VSCode](https://code.visualstudio.com)Coded
 
 ### Version
-- Current Version: 1.0.1  
-***No version supports saving progress. Nood(Author) thinks this feature is unnecessary. Besides, no packages have been released for this project on GitHub.***
+- Current Version: 1.1.0
+*No version supports saving progress. Nood(Author) thinks this feature is unnecessary. Besides, no packages have been released for this project on GitHub.*
 - Update: Refined the details of card hover effects.
 
 ### Demo Site
